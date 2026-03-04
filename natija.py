@@ -1,10 +1,9 @@
 import customtkinter as ctk
 from tkinter import filedialog, messagebox
-import pandas as pd
 import data
 import subprocess
-import os
 import threading
+import sys
 
 class FinalApp(ctk.CTk):
     def __init__(self):
@@ -28,9 +27,13 @@ class FinalApp(ctk.CTk):
         ctk.CTkButton(self.sidebar, text="📥 IMPORT DATA", fg_color="#10B981", height=45, command=self.import_file).pack(pady=5, padx=20)
         ctk.CTkButton(self.sidebar, text="📤 EXPORT RESULTS", fg_color="#D97706", height=45, command=self.export_file).pack(pady=5, padx=20)
         
-        ctk.CTkLabel(self.sidebar, text="TIZIM", font=("Arial", 18, "bold")).pack(pady=(20,10))
+      
         self.exe_btn = ctk.CTkButton(self.sidebar, text="🛠 EXE FAYL YARATISH", fg_color="#7C3AED", height=45, command=self.start_exe_thread)
         self.exe_btn.pack(pady=5, padx=20)
+
+
+        if getattr(sys, 'frozen', False):
+            self.exe_btn.pack_forget()
 
         ctk.CTkLabel(self.sidebar, text="ID BILAN QIDIRUV", font=("Arial", 14, "bold")).pack(pady=(30,5))
         self.id_search_entry = ctk.CTkEntry(self.sidebar, placeholder_text="ID kiriting...", height=35)
@@ -86,15 +89,11 @@ class FinalApp(ctk.CTk):
 
     def make_exe(self):
         try:
-            cmd = [
-                "pyinstaller", "--noconsole", "--onefile", 
-                "--collect-all", "customtkinter", 
-                "--name", "TATU_Database_System", "main.py"
-            ]
+            cmd = ["pyinstaller", "--noconsole", "--onefile", "--collect-all", "customtkinter", "--name", "TATU_Database_System", "main.py"]
             subprocess.run(cmd, check=True)
-            messagebox.showinfo("Muvaffaqiyat", "EXE fayl 'dist' papkasida yaratildi!")
+            messagebox.showinfo("Tayyor", "EXE yaratildi! 'dist' papkasidan olishingiz mumkin.")
         except Exception as e:
-            messagebox.showerror("Xato", f"EXE yaratishda xato: {e}")
+            messagebox.showerror("Xato", f"Xato yuz berdi: {e}")
         finally:
             self.exe_btn.configure(state="normal", text="🛠 EXE FAYL YARATISH")
 
@@ -152,4 +151,4 @@ class FinalApp(ctk.CTk):
             path = filedialog.asksaveasfilename(defaultextension=".xlsx")
             if path:
                 self.filtered_df.to_excel(path, index=False)
-                messagebox.showinfo("OK", "Saqlandi!")
+                messagebox.showinfo("OK", "Muvaffaqiyatli saqlandi!")

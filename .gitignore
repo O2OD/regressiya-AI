@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/venv,python,windows,visualstudiocode
-# Edit at https://www.toptal.com/developers/gitignore?templates=venv,python,windows,visualstudiocode
+# Created by https://www.toptal.com/developers/gitignore/api/python,venv,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=python,venv,visualstudiocode
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -124,10 +124,13 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-# Environments
 .env
-venv/
+.venv
 env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
 # Spyder project settings
 .spyderproject
@@ -201,30 +204,4 @@ pip-selfcheck.json
 .history
 .ionide
 
-### Windows ###
-# Windows thumbnail cache files
-Thumbs.db
-Thumbs.db:encryptable
-ehthumbs.db
-ehthumbs_vista.db
-
-# Dump file
-*.stackdump
-
-# Folder config file
-[Dd]esktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# Windows Installer files
-*.cab
-*.msi
-*.msix
-*.msm
-*.msp
-
-# Windows shortcuts
-*.lnk
-
-# End of https://www.toptal.com/developers/gitignore/api/venv,python,windows,visualstudiocode
+# End of https://www.toptal.com/developers/gitignore/api/python,venv,visualstudiocode

@@ -9,7 +9,7 @@ def process_data(file_path):
     mapping = {
         'Talaba ID': 'ID',
         'To‘liq ismi': 'Ism',
-        'Toliq ismi': 'Ism'
+        'To\'liq ismi': 'Ism'
     }
     df = df.rename(columns=mapping)
     df.columns = df.columns.str.strip()
