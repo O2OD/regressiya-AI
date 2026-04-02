@@ -1,3 +1,4 @@
+import io
 import streamlit as st
 import numpy as np
 import pandas as pd
@@ -91,3 +92,14 @@ with col2:
     ax.grid(True, linestyle='--', alpha=0.5)
     
     st.pyplot(fig)
+
+buffer = io.BytesIO()
+with pd.ExcelWriter(buffer, engine='openpyxl') as writer:
+    df.to_excel(writer, index=False, sheet_name='Natijalar')
+
+st.download_button(
+    label="📥 Excelga yuklash (.xlsx)",
+    data=buffer.getvalue(),
+    file_name="bashorat.xlsx",
+    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+)
