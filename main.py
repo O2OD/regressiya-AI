@@ -93,13 +93,20 @@ with col2:
     
     st.pyplot(fig)
 
+future_df = pd.DataFrame({
+    'Holat': ['AI Bashorati (Kelajak)'] * len(future_x),
+    'X (Kelajak qadami)': np.round(future_x, 2),
+    'Y (Kutilayotgan natija)': np.round(future_y, 2)
+})
+
 buffer = io.BytesIO()
 with pd.ExcelWriter(buffer, engine='openpyxl') as writer:
-    df.to_excel(writer, index=False, sheet_name='Natijalar')
+    df.to_excel(writer, index=False, sheet_name="Tarixiy ma'lumotlar")
+    future_df.to_excel(writer, index=False, sheet_name="AI Bashoratlari")
 
 st.download_button(
-    label="📥 Excelga yuklash (.xlsx)",
+    label="📥 To'liq hisobotni Excelga yuklash (.xlsx)",
     data=buffer.getvalue(),
-    file_name="bashorat.xlsx",
+    file_name="AI_Bashorat_Hisoboti.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
