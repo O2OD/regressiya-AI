@@ -8,6 +8,25 @@ from sklearn.cluster import KMeans
 
 st.set_page_config(page_title="AI Data Suite", page_icon="🧠", layout="wide")
 
+st.markdown("""
+<style>
+    div[data-testid="stMetricValue"] {
+        font-size: 35px !important;
+        color: #00FFAA !important;
+        font-weight: bold;
+    }
+    .stDownloadButton button {
+        border-radius: 8px;
+        transition: 0.3s;
+        box-shadow: 0 4px 15px rgba(0, 255, 170, 0.2);
+    }
+    .stDownloadButton button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 255, 170, 0.4);
+    }
+</style>
+""", unsafe_allow_html=True)
+
 st.sidebar.title("🛠️ Platforma Menyusi")
 app_mode = st.sidebar.radio(
     "AI vositasini tanlang:",
@@ -67,6 +86,13 @@ if app_mode == "1. 🔍 K-Means (Klasterlash)":
                 clean_df['Klaster'] = clusters + 1
                 
                 st.subheader("📊 Klasterlash Natijasi")
+                
+                col_m1, col_m2, col_m3 = st.columns(3)
+                col_m1.metric("Mijozlar soni", f"{len(clean_df)} ta")
+                col_m2.metric("Klasterlar soni", f"{k_clusters} ta")
+                col_m3.metric("O'rtacha qiymat (Y)", f"{int(clean_df.iloc[:, 1].mean())}")
+                st.markdown("<br>", unsafe_allow_html=True)
+                
                 fig, ax = plt.subplots(figsize=(10, 4.5))
                 scatter = ax.scatter(x_vals, y_vals, c=clusters, cmap='viridis', s=100, alpha=0.8, edgecolors='w')
                 ax.scatter(centroids[:, 0], centroids[:, 1], c='red', s=250, marker='X', label='Markazlar')
@@ -74,6 +100,10 @@ if app_mode == "1. 🔍 K-Means (Klasterlash)":
                 ax.set_ylabel(y_name, fontsize=10)
                 ax.legend()
                 ax.grid(True, linestyle='--', alpha=0.5)
+                
+                ax.spines['top'].set_visible(False)
+                ax.spines['right'].set_visible(False)
+                
                 st.pyplot(fig)
                 
                 buffer = io.BytesIO()
@@ -128,12 +158,19 @@ elif app_mode == "2. 📈 Regressiya (Bashorat)":
                 st.subheader("📈 Natija va Grafik")
                 st.success(f"Regressiya tenglamasi: y = {a:.4f}x {'+' if b>0 else '-'} {abs(b):.4f}")
                 
+                future_x = np.linspace(np.max(x), np.max(x) + future_steps, 20)
+                future_y = a * future_x + b
+                
+                col_m1, col_m2, col_m3 = st.columns(3)
+                col_m1.metric("Faktlar soni", f"{len(clean_df)} ta")
+                col_m2.metric("Kelajak qadamlar", f"{future_steps} ta")
+                col_m3.metric("Kutilayotgan natija", f"{int(future_y[-1])}")
+                st.markdown("<br>", unsafe_allow_html=True)
+                
                 fig, ax = plt.subplots(figsize=(10, 4.5))
                 ax.scatter(x, y, color='#1f77b4', s=60, alpha=0.8, label="Faktlar")
                 x_line = np.linspace(np.min(x), np.max(x), 100)
                 ax.plot(x_line, a * x_line + b, color='#d62728', linewidth=2.5, label="Regressiya")
-                future_x = np.linspace(np.max(x), np.max(x) + future_steps, 20)
-                future_y = a * future_x + b
                 ax.plot(future_x, future_y, color='#2ca02c', linestyle='dashed', linewidth=2.5, label="Bashorat")
                 ax.scatter(future_x[-1], future_y[-1], color='#ff7f0e', s=120, zorder=5, label="Yakuniy nuqta")
                 
@@ -144,6 +181,10 @@ elif app_mode == "2. 📈 Regressiya (Bashorat)":
                 ax.set_ylabel(y_name, fontsize=10)
                 ax.legend(loc='lower right', fontsize=10)
                 ax.grid(True, linestyle='--', alpha=0.5)
+                
+                ax.spines['top'].set_visible(False)
+                ax.spines['right'].set_visible(False)
+                
                 st.pyplot(fig)
                 
                 future_report = pd.DataFrame({'Holat': ['Bashorat'] * len(future_x), x_name: np.round(future_x, 2), y_name: np.round(future_y, 2)})
